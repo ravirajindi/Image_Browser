@@ -26,7 +26,7 @@ fun ImageBrowserApp() {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { }
+        topBar = { ImageBrowserTopAppBar(scrollBehavior = scrollBehavior) }
     ) {
         Surface (
             modifier = Modifier
