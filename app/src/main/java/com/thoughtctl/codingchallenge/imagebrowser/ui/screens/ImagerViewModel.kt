@@ -4,10 +4,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import com.thoughtctl.codingchallenge.imagebrowser.network.ImagerApi
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.thoughtctl.codingchallenge.imagebrowser.ImageBrowserApplication
+import com.thoughtctl.codingchallenge.imagebrowser.data.ImagerPhotosRepository
 import com.thoughtctl.codingchallenge.imagebrowser.network.ImagerApiResponse
-import com.thoughtctl.codingchallenge.imagebrowser.network.ImagerApiService
 import kotlinx.coroutines.launch
 import java.io.IOException
 
@@ -17,7 +21,7 @@ sealed interface ImagerUiState {
     object Loading : ImagerUiState
 }
 
-class ImagerViewModel : ViewModel() {
+class ImagerViewModel (private val imagerPhotosRepository: ImagerPhotosRepository) : ViewModel() {
 
     /** The mutable State that stores the status of the most recent request */
     var imagerUiState : ImagerUiState by mutableStateOf(ImagerUiState.Loading)
@@ -37,10 +41,20 @@ class ImagerViewModel : ViewModel() {
     fun searchTopImagesOfTheWeek(searchQuery : String) {
         viewModelScope.launch {
             imagerUiState = try {
-                val response = ImagerApi.retrofitService.searchTopImagesOfTheWeek(searchQuery)
+                val response = imagerPhotosRepository.searchTopImagesOfTheWeek(searchQuery)
                 ImagerUiState.Success(response)
             } catch (e : IOException) {
                 ImagerUiState.Error
+            }
+        }
+    }
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application = (this[APPLICATION_KEY] as ImageBrowserApplication)
+                val imagerPhotosRepository = application.container.imagerPhotosRepository
+                ImagerViewModel(imagerPhotosRepository = imagerPhotosRepository)
             }
         }
     }

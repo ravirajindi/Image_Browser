@@ -37,7 +37,7 @@ fun ImageBrowserApp() {
                 .fillMaxSize()
                 .padding(it)
         ) {
-            val imagerViewModel : ImagerViewModel = viewModel()
+            val imagerViewModel : ImagerViewModel = viewModel(factory = ImagerViewModel.Factory)
             HomeScreen(imagerUiState = imagerViewModel.imagerUiState)
         }
     }
