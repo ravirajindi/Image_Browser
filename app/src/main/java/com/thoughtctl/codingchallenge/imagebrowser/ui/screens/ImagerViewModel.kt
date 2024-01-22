@@ -6,12 +6,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.thoughtctl.codingchallenge.imagebrowser.network.ImagerApi
+import com.thoughtctl.codingchallenge.imagebrowser.network.ImagerApiResponse
 import com.thoughtctl.codingchallenge.imagebrowser.network.ImagerApiService
 import kotlinx.coroutines.launch
 import java.io.IOException
 
 sealed interface ImagerUiState {
-    data class Success(val result : String) : ImagerUiState
+    data class Success(val response : ImagerApiResponse) : ImagerUiState
     object Error : ImagerUiState
     object Loading : ImagerUiState
 }
@@ -34,13 +35,13 @@ class ImagerViewModel : ViewModel() {
      * [ImagerPhoto] [List] [MutableList].
      */
     fun searchTopImagesOfTheWeek(searchQuery : String) {
-        try {
-            viewModelScope.launch {
-                val listResult = ImagerApi.retrofitService.searchTopImagesOfTheWeek(searchQuery)
-                imagerUiState = ImagerUiState.Success(listResult)
+        viewModelScope.launch {
+            imagerUiState = try {
+                val response = ImagerApi.retrofitService.searchTopImagesOfTheWeek(searchQuery)
+                ImagerUiState.Success(response)
+            } catch (e : IOException) {
+                ImagerUiState.Error
             }
-        } catch (e : IOException) {
-            imagerUiState = ImagerUiState.Error
         }
     }
 }
