@@ -1,9 +1,11 @@
-package com.thoughtctl.codingchallenge.imagebrowser.ui.theme
+package com.thoughtctl.codingchallenge.imagebrowser.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
@@ -15,24 +17,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.thoughtctl.codingchallenge.imagebrowser.R
+import com.thoughtctl.codingchallenge.imagebrowser.ui.theme.ImageBrowserTheme
 
 /**
  * Composable to define root of the home screen
  */
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
-     /*LoadingScreen(
-         modifier = modifier
-     )*/
-
-    ResultScreen(
-        result = stringResource(R.string.placeholder_result),
-        modifier = modifier,
-    )
-
-    /*ErrorScreen(
-        modifier = modifier.fillMaxSize()
-    )*/
+fun HomeScreen(
+    imagerUiState: ImagerUiState,
+    modifier: Modifier = Modifier
+) {
+    when (imagerUiState) {
+        is ImagerUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
+        is ImagerUiState.Success -> ResultScreen(
+            imagerUiState.result, modifier = modifier.fillMaxWidth()
+        )
+        is ImagerUiState.Error -> ErrorScreen( modifier = modifier.fillMaxSize())
+    }
 }
 
 /**

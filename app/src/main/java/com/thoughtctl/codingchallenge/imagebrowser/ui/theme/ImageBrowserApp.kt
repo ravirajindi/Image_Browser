@@ -16,11 +16,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.thoughtctl.codingchallenge.imagebrowser.R
+import com.thoughtctl.codingchallenge.imagebrowser.ui.screens.HomeScreen
+import com.thoughtctl.codingchallenge.imagebrowser.ui.screens.ImagerViewModel
 
 /**
  * A container composable to hold the screen level composable
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ImageBrowserApp() {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -33,7 +37,8 @@ fun ImageBrowserApp() {
                 .fillMaxSize()
                 .padding(it)
         ) {
-            HomeScreen()
+            val imagerViewModel : ImagerViewModel = viewModel()
+            HomeScreen(imagerUiState = imagerViewModel.imagerUiState)
         }
     }
 }
