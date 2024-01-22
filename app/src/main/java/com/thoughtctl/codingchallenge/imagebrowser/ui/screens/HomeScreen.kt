@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.thoughtctl.codingchallenge.imagebrowser.R
-import com.thoughtctl.codingchallenge.imagebrowser.network.ImagerApiResponse
+import com.thoughtctl.codingchallenge.imagebrowser.network.Data
 import com.thoughtctl.codingchallenge.imagebrowser.ui.theme.ImageBrowserTheme
 
 /**
@@ -31,7 +31,7 @@ fun HomeScreen(
     when (imagerUiState) {
         is ImagerUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
         is ImagerUiState.Success -> ResultScreen(
-            imagerUiState.response, modifier = modifier.fillMaxWidth()
+            imagerUiState.posts, modifier = modifier.fillMaxWidth()
         )
         is ImagerUiState.Error -> ErrorScreen( modifier = modifier.fillMaxSize())
     }
@@ -55,12 +55,12 @@ fun LoadingScreen(
  * A placeholder composable to show the result after successful loading of data
  */
 @Composable
-fun ResultScreen(response : ImagerApiResponse, modifier: Modifier = Modifier) {
+fun ResultScreen(posts : List<Data>, modifier: Modifier = Modifier) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
     ) {
-        Text(text = "${response.success}")
+        Text(text = "${posts.size} post found")
     }
 }
 
@@ -101,7 +101,24 @@ fun LoadingScreenPreview() {
 fun ResultScreenPreview() {
     ImageBrowserTheme {
         ResultScreen(
-            response = ImagerApiResponse(listOf(), 200, true),
+            posts = listOf(
+                Data(
+                    id = "1",
+                    title = "post 1",
+                    datetime = 100,
+                    isAlbum = false,
+                    link = "image_url_1"
+                ),
+                Data(
+                    id = "2",
+                    title = "post 2",
+                    datetime = 200,
+                    isAlbum = true,
+                    cover = "cover_image_url",
+                    imagesCount = 3,
+                    link = "album_1_url"
+                )
+            ),
             modifier = Modifier
         )
     }

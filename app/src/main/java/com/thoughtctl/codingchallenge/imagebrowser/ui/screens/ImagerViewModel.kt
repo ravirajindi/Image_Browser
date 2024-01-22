@@ -11,12 +11,12 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.thoughtctl.codingchallenge.imagebrowser.ImageBrowserApplication
 import com.thoughtctl.codingchallenge.imagebrowser.data.ImagerPhotosRepository
-import com.thoughtctl.codingchallenge.imagebrowser.network.ImagerApiResponse
+import com.thoughtctl.codingchallenge.imagebrowser.network.Data
 import kotlinx.coroutines.launch
 import java.io.IOException
 
 sealed interface ImagerUiState {
-    data class Success(val response : ImagerApiResponse) : ImagerUiState
+    data class Success(val posts : List<Data>) : ImagerUiState
     object Error : ImagerUiState
     object Loading : ImagerUiState
 }
@@ -41,8 +41,8 @@ class ImagerViewModel (private val imagerPhotosRepository: ImagerPhotosRepositor
     fun searchTopImagesOfTheWeek(searchQuery : String) {
         viewModelScope.launch {
             imagerUiState = try {
-                val response = imagerPhotosRepository.searchTopImagesOfTheWeek(searchQuery)
-                ImagerUiState.Success(response)
+                val posts = imagerPhotosRepository.searchTopImagesOfTheWeek(searchQuery)
+                ImagerUiState.Success(posts)
             } catch (e : IOException) {
                 ImagerUiState.Error
             }
