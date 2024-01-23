@@ -12,6 +12,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.thoughtctl.codingchallenge.imagebrowser.ImageBrowserApplication
 import com.thoughtctl.codingchallenge.imagebrowser.data.ImagerPhotosRepository
 import com.thoughtctl.codingchallenge.imagebrowser.network.Data
+import com.thoughtctl.codingchallenge.imagebrowser.network.ImagerApiResponse
 import kotlinx.coroutines.launch
 import java.io.IOException
 
@@ -19,26 +20,21 @@ sealed interface ImagerUiState {
     data class Success(val posts : List<Data>) : ImagerUiState
     object Error : ImagerUiState
     object Loading : ImagerUiState
+    object Idle : ImagerUiState
 }
 
 class ImagerViewModel (private val imagerPhotosRepository: ImagerPhotosRepository) : ViewModel() {
 
     /** The mutable State that stores the status of the most recent request */
-    var imagerUiState : ImagerUiState by mutableStateOf(ImagerUiState.Loading)
+    var imagerUiState : ImagerUiState by mutableStateOf(ImagerUiState.Idle)
         private set
 
     /**
-     * Call searchTopImagesOfTheWeek() on init so we can display status immediately.
-     */
-    init {
-        searchTopImagesOfTheWeek("cats")
-    }
-
-    /**
      * Searches top images of the week from the Imager API Retrofit service and updates the
-     * [ImagerPhoto] [List] [MutableList].
+     * [ImagerApiResponse]
      */
     fun searchTopImagesOfTheWeek(searchQuery : String) {
+        imagerUiState = ImagerUiState.Loading
         viewModelScope.launch {
             imagerUiState = try {
                 val posts = imagerPhotosRepository.searchTopImagesOfTheWeek(searchQuery)

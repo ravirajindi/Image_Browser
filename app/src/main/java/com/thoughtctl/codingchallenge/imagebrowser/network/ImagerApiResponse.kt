@@ -28,4 +28,20 @@ data class Data(
     val imagesCount: Int? = null,
     @SerialName("link")
     val link: String,
+    @SerialName("gifv")
+    val gifLink: String? = null,
+    @SerialName("images")
+    val images : List<Image>? = null
+)
+
+@Serializable
+data class Image(
+    @SerialName("id")
+    val id: String,
+    @SerialName("type")
+    val type: String,
+    @SerialName("link")
+    val link: String,
+    @SerialName("gifv")
+    val gifLink: String? = null,
 )
