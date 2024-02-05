@@ -1,47 +1,14 @@
 package com.thoughtctl.codingchallenge.imagebrowser.network
+import com.thoughtctl.codingchallenge.imagebrowser.model.Post
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ImagerApiResponse(
     @SerialName("data")
-    val data: List<Data>,
+    val data: List<Post>,
     @SerialName("status")
     val status: Int,
     @SerialName("success")
     val success: Boolean
-)
-
-@Serializable
-data class Data(
-    @SerialName("id")
-    val id: String,
-    @SerialName("title")
-    val title: String,
-    @SerialName("datetime")
-    val datetime: Int,
-    @SerialName("is_album")
-    val isAlbum: Boolean,
-    @SerialName("cover")
-    val cover: String? = null,
-    @SerialName("images_count")
-    val imagesCount: Int? = null,
-    @SerialName("link")
-    val link: String,
-    @SerialName("gifv")
-    val gifLink: String? = null,
-    @SerialName("images")
-    val images : List<Image>? = null
-)
-
-@Serializable
-data class Image(
-    @SerialName("id")
-    val id: String,
-    @SerialName("type")
-    val type: String,
-    @SerialName("link")
-    val link: String,
-    @SerialName("gifv")
-    val gifLink: String? = null,
 )

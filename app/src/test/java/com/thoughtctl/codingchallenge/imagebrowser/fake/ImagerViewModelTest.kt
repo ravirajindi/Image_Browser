@@ -1,6 +1,6 @@
 package com.thoughtctl.codingchallenge.imagebrowser.fake
 
-import com.thoughtctl.codingchallenge.imagebrowser.network.Data
+import com.thoughtctl.codingchallenge.imagebrowser.network.Post
 import com.thoughtctl.codingchallenge.imagebrowser.rules.TestDispatcherRule
 import com.thoughtctl.codingchallenge.imagebrowser.ui.screens.ImagerUiState
 import com.thoughtctl.codingchallenge.imagebrowser.ui.screens.ImagerViewModel
@@ -19,14 +19,14 @@ class ImagerViewModelTest {
         runTest {
             val imagerViewModel = ImagerViewModel(imagerPhotosRepository = FakeNetworkImagerPhotosRepository())
             val photosList = listOf(
-                Data(
+                Post(
                     id = "1",
                     title = "post 1",
                     datetime = 100,
                     isAlbum = false,
                     link = "image_url_1"
                 ),
-                Data(
+                Post(
                     id = "2",
                     title = "post 2",
                     datetime = 200,

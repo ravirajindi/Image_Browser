@@ -9,15 +9,19 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.thoughtctl.codingchallenge.imagebrowser.ImageBrowserApplication
+import com.thoughtctl.codingchallenge.imagebrowser.data.ImagerPhotosPagingSource
 import com.thoughtctl.codingchallenge.imagebrowser.data.ImagerPhotosRepository
-import com.thoughtctl.codingchallenge.imagebrowser.network.Data
+import com.thoughtctl.codingchallenge.imagebrowser.model.Post
 import com.thoughtctl.codingchallenge.imagebrowser.network.ImagerApiResponse
-import kotlinx.coroutines.launch
-import java.io.IOException
+import kotlinx.coroutines.flow.Flow
 
 sealed interface ImagerUiState {
-    data class Success(val posts : List<Data>) : ImagerUiState
+    data class Success(val posts : List<Post>) : ImagerUiState
     object Error : ImagerUiState
     object Loading : ImagerUiState
     object Idle : ImagerUiState
@@ -29,20 +33,31 @@ class ImagerViewModel (private val imagerPhotosRepository: ImagerPhotosRepositor
     var imagerUiState : ImagerUiState by mutableStateOf(ImagerUiState.Idle)
         private set
 
+    private var currentQuery = ""
+
+    private var imagerPhotosPagingSource : ImagerPhotosPagingSource? = null
+        get() {
+            if(field == null || field?.invalid == true) {
+                field = ImagerPhotosPagingSource(searchQuery = currentQuery, repository = imagerPhotosRepository)
+            }
+            return field
+        }
+
+    val posts : Flow<PagingData<Post>> = Pager(config = PagingConfig(
+        pageSize = 50,
+        enablePlaceholders = false,
+        )
+    ) {
+        imagerPhotosPagingSource ?: ImagerPhotosPagingSource(searchQuery = currentQuery, repository = imagerPhotosRepository)
+    }.flow.cachedIn(viewModelScope)
+
     /**
      * Searches top images of the week from the Imager API Retrofit service and updates the
      * [ImagerApiResponse]
      */
     fun searchTopImagesOfTheWeek(searchQuery : String) {
-        imagerUiState = ImagerUiState.Loading
-        viewModelScope.launch {
-            imagerUiState = try {
-                val posts = imagerPhotosRepository.searchTopImagesOfTheWeek(searchQuery)
-                ImagerUiState.Success(posts)
-            } catch (e : IOException) {
-                ImagerUiState.Error
-            }
-        }
+        currentQuery = searchQuery
+        imagerPhotosPagingSource?.invalidate()
     }
 
     companion object {
