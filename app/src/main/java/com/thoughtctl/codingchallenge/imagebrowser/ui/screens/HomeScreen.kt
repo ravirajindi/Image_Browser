@@ -42,7 +42,7 @@ fun HomeScreen(
     displayMode: DisplayMode = DisplayMode.LIST,
     modifier: Modifier = Modifier
 ) {
-    val imagerViewModel : ImagerViewModel = viewModel(factory = ImagerViewModel.Factory)
+    val imagerViewModel : ImagerViewModel = viewModel()
 
     val posts = imagerViewModel.posts.collectAsLazyPagingItems()
 

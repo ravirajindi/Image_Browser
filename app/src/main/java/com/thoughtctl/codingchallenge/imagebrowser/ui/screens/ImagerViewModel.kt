@@ -1,23 +1,21 @@
 package com.thoughtctl.codingchallenge.imagebrowser.ui.screens
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.thoughtctl.codingchallenge.imagebrowser.ImageBrowserApplication
 import com.thoughtctl.codingchallenge.imagebrowser.data.ImagerPhotosPagingSource
 import com.thoughtctl.codingchallenge.imagebrowser.data.ImagerPhotosRepository
 import com.thoughtctl.codingchallenge.imagebrowser.model.Post
 import com.thoughtctl.codingchallenge.imagebrowser.network.ImagerApiResponse
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class ImagerViewModel (private val imagerPhotosRepository: ImagerPhotosRepository) : ViewModel() {
+@HiltViewModel
+class ImagerViewModel @Inject constructor(private val imagerPhotosRepository: ImagerPhotosRepository) : ViewModel() {
 
     private var currentQuery = ""
 
@@ -44,15 +42,5 @@ class ImagerViewModel (private val imagerPhotosRepository: ImagerPhotosRepositor
     fun searchTopImagesOfTheWeek(searchQuery : String) {
         currentQuery = searchQuery
         imagerPhotosPagingSource?.invalidate()
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val application = (this[APPLICATION_KEY] as ImageBrowserApplication)
-                val imagerPhotosRepository = application.container.imagerPhotosRepository
-                ImagerViewModel(imagerPhotosRepository = imagerPhotosRepository)
-            }
-        }
     }
 }
