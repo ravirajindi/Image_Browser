@@ -1,6 +1,5 @@
 package com.thoughtctl.codingchallenge.imagebrowser.data
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.thoughtctl.codingchallenge.imagebrowser.model.Post
@@ -12,12 +11,10 @@ class ImagerPhotosPagingSource(
     private val repository: ImagerPhotosRepository
 ) : PagingSource<Int, Post>() {
     override fun getRefreshKey(state: PagingState<Int, Post>): Int? {
-        Log.e("Imager", "getRefreshKey")
         return state.anchorPosition
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Post> {
-        Log.e("Imager", "load")
         return try {
             val currentPage = params.key ?: 0
             val result = repository.searchTopImagesOfTheWeek(searchQuery, currentPage)

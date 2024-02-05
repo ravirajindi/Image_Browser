@@ -10,7 +10,7 @@ class NetworkImagesPhotosRepositoryTest {
     fun networkImagerPhotosRepository_searchPhotosOfTheWeek_verifyPhotoList(){
         runTest {
             val repository = NetworkImagerPhotosRepository(imagerApiService = FakeImagerApiService())
-            assertEquals(FakeDataSource.photosList, repository.searchTopImagesOfTheWeek(""))
+            assertEquals(FakeDataSource.photosList.sortedByDescending { it.datetime }, repository.searchTopImagesOfTheWeek("", 0))
         }
     }
 

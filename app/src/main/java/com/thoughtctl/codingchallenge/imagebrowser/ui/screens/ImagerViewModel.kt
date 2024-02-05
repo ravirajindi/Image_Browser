@@ -1,8 +1,5 @@
 package com.thoughtctl.codingchallenge.imagebrowser.ui.screens
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -20,18 +17,7 @@ import com.thoughtctl.codingchallenge.imagebrowser.model.Post
 import com.thoughtctl.codingchallenge.imagebrowser.network.ImagerApiResponse
 import kotlinx.coroutines.flow.Flow
 
-sealed interface ImagerUiState {
-    data class Success(val posts : List<Post>) : ImagerUiState
-    object Error : ImagerUiState
-    object Loading : ImagerUiState
-    object Idle : ImagerUiState
-}
-
 class ImagerViewModel (private val imagerPhotosRepository: ImagerPhotosRepository) : ViewModel() {
-
-    /** The mutable State that stores the status of the most recent request */
-    var imagerUiState : ImagerUiState by mutableStateOf(ImagerUiState.Idle)
-        private set
 
     private var currentQuery = ""
 

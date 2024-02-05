@@ -1,10 +1,8 @@
 package com.thoughtctl.codingchallenge.imagebrowser.fake
 
-import com.thoughtctl.codingchallenge.imagebrowser.network.Post
+import com.thoughtctl.codingchallenge.imagebrowser.model.Post
 import com.thoughtctl.codingchallenge.imagebrowser.rules.TestDispatcherRule
-import com.thoughtctl.codingchallenge.imagebrowser.ui.screens.ImagerUiState
 import com.thoughtctl.codingchallenge.imagebrowser.ui.screens.ImagerViewModel
-import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -35,10 +33,6 @@ class ImagerViewModelTest {
                     imagesCount = 3,
                     link = "album_1_url"
                 )
-            )
-            assertEquals(
-                ImagerUiState.Success(photosList),
-                imagerViewModel.imagerUiState
             )
         }
 }
