@@ -1,11 +1,19 @@
 package com.thoughtctl.codingchallenge.imagebrowser.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import com.example.android.codelabs.paging.db.TypeConvertor
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.text.SimpleDateFormat
+import java.util.Locale
 
+@Entity(tableName = "posts")
+@TypeConverters(TypeConvertor::class)
 @Serializable
 data class Post(
-    @SerialName("id")
+    @PrimaryKey(autoGenerate = false) @SerialName("id")
     val id: String,
     @SerialName("title")
     val title: String,
@@ -43,3 +51,6 @@ fun Post.getImageUrlForPost() : String {
     }
     return imageUrl.replace("mp4", "jpg")
 }
+
+val Post.dateFormatter: SimpleDateFormat
+    get() = SimpleDateFormat("dd/MM/yy", Locale.getDefault())

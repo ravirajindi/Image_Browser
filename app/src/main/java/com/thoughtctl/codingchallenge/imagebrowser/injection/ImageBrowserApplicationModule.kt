@@ -1,12 +1,13 @@
 package com.thoughtctl.codingchallenge.imagebrowser.injection
 
+import android.content.Context
+import com.example.android.codelabs.paging.db.ImageBrowserDatabase
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.thoughtctl.codingchallenge.imagebrowser.data.ImagerPhotosRepository
-import com.thoughtctl.codingchallenge.imagebrowser.data.NetworkImagerPhotosRepository
 import com.thoughtctl.codingchallenge.imagebrowser.network.ImagerApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -34,8 +35,8 @@ class ImageBrowserApplicationModule {
         }
 
         @Provides
-        fun providesImagerPhotosRepository(service: ImagerApiService) : ImagerPhotosRepository {
-            return NetworkImagerPhotosRepository(service)
+        fun providesImageBrowserDatabase(@ApplicationContext context: Context) : ImageBrowserDatabase {
+            return ImageBrowserDatabase.getInstance(context)
         }
     }
 }
