@@ -1,4 +1,4 @@
-This is an image browsing demo application which is developed as part of coding challenge for thoughtctl
+This is an image browsing demo application which was developed as part of coding challenge for interview purpose.
 
 Steps to build and install apk
 1. Open the project in Android Studio
@@ -28,8 +28,7 @@ Architectural decisions
 5. Keeping data class for serialization as light as possible since only fewer keys are actually used/required to show desired UI
 
 TODO: 
-1. Implement pagination
-2. Implement debouncing for search query
-3. Store sensitive information used in app such as client id in secure manner
-4. Handle mp4/gif urls in appropriate manner and get rid of the workaround which loads mp4/gif url as static image
-5. Add 'Scroll To Top' option
+1. Implement debouncing for search query
+2. Store sensitive information used in app such as client id in secure manner
+3. Handle mp4/gif urls in appropriate manner and get rid of the workaround which loads mp4/gif url as static image
+4. Add 'Scroll To Top' option
